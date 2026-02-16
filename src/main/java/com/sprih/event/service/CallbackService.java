@@ -12,13 +12,27 @@ public class CallbackService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void sendSuccess(Event event) {
-        CallbackRequest body = CallbackRequest.success(event);
-        restTemplate.postForEntity(event.getCallbackUrl(), body, Void.class);
+        try {
+            restTemplate.postForEntity(
+                    event.getCallbackUrl(),
+                    CallbackRequest.success(event),
+                    Void.class
+            );
+        } catch (Exception e) {
+            System.err.println("Callback failed: " + e.getMessage());
+        }
     }
 
     public void sendFailure(Event event, String error) {
-        CallbackRequest body = CallbackRequest.failure(event, error);
-        restTemplate.postForEntity(event.getCallbackUrl(), body, Void.class);
+        try {
+            restTemplate.postForEntity(
+                    event.getCallbackUrl(),
+                    CallbackRequest.failure(event, error),
+                    Void.class
+            );
+        } catch (Exception e) {
+            System.err.println("Callback failed: " + e.getMessage());
+        }
     }
 }
 
