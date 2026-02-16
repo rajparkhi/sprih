@@ -1,6 +1,9 @@
 package com.sprih.event.config;
 
 import com.sprih.event.service.EventService;
+import com.sprih.event.service.processor.EmailEventProcessor;
+import com.sprih.event.service.processor.PushEventProcessor;
+import com.sprih.event.service.processor.SmsEventProcessor;
 import jakarta.annotation.PreDestroy;
 import org.springframework.context.annotation.Configuration;
 

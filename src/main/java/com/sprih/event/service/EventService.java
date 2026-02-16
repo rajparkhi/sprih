@@ -2,6 +2,7 @@ package com.sprih.event.service;
 
 import com.sprih.event.model.Event;
 import com.sprih.event.model.dto.EventRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,14 +13,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Service
 public class EventService {
 
-    private final BlockingQueue<Event> emailQueue = new LinkedBlockingQueue<>();
-    private final BlockingQueue<Event> smsQueue = new LinkedBlockingQueue<>();
-    private final BlockingQueue<Event> pushQueue = new LinkedBlockingQueue<>();
 
-    private volatile boolean acceptingEvents = true;
+    private final BlockingQueue<Event> emailQueue;
+    private final BlockingQueue<Event> smsQueue;
+    private final BlockingQueue<Event> pushQueue;
+
+    private volatile boolean accepting = true;
+
+    public EventService(
+            @Qualifier("emailQueue") BlockingQueue<Event> emailQueue,
+            @Qualifier("smsQueue") BlockingQueue<Event> smsQueue,
+            @Qualifier("pushQueue") BlockingQueue<Event> pushQueue) {
+        this.emailQueue = emailQueue;
+        this.smsQueue = smsQueue;
+        this.pushQueue = pushQueue;
+    }
 
     public String acceptEvent(EventRequest request) {
-        if (!acceptingEvents) {
+        if (!accepting) {
             throw new IllegalStateException("System shutting down");
         }
 
@@ -41,7 +52,7 @@ public class EventService {
     }
 
     public void stopAccepting() {
-        acceptingEvents = false;
+        accepting = false;
     }
 
     public BlockingQueue<Event> emailQueue() { return emailQueue; }
