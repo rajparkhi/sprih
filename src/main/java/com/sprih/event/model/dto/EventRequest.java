@@ -14,12 +14,12 @@ import java.util.Map;
 @NoArgsConstructor
 public class EventRequest {
 
-    @NotNull
+    @NotNull(message = "Event Type is required")
     private EventType eventType;
 
-    @NotNull
+    @NotNull(message = "Payload cannot be null")
     private Map<String, Object> payload;
 
-    @NotBlank
+    @NotBlank(message = "Callback url is required")
     private String callbackUrl;
 }
