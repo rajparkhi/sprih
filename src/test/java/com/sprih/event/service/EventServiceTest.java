@@ -22,7 +22,7 @@ class EventServiceTest {
         EventRequest request = new EventRequest();
         request.setEventType(EventType.EMAIL);
         request.setPayload(Map.of("recipient", "test@test.com"));
-        request.setCallbackUrl("http://localhost");
+        request.setCallbackUrl("http://localhost:8080/test-callback");
 
         String eventId = eventService.acceptEvent(request);
 
